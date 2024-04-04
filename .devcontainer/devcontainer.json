@@ -22,15 +22,6 @@
 			"version": "lts",
 			"nvmVersion": "latest"
 		}
-		// "ghcr.io/devcontainers/features/nvidia-cuda:1": {
-		// 	"installCudnn": true,
-		// 	"cudaVersion": "12.2",
-		//  	"cudnnVersion": "8.6.0.163"
-		// }
-		// "ghcr.io/devcontainers/features/nvidia-cuda:1": {
-		// 	"cudaVersion": "12.2",
-		// 	"cudnnVersion": "8.6.0.163"
-		// }
 	}
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
