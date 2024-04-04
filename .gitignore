@@ -172,6 +172,7 @@ frontend/.pnp
 frontend/bun.lockb
 frontend/yarn.lock
 .pnp.js
+.pnpm-store
 
 # testing
 frontend/coverage
