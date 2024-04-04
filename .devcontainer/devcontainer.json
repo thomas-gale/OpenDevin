@@ -1,9 +1,12 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/debian
 {
-	"name": "OpenDevin - Ubuntu 22.04 - CUDA 12.2 - cuDNN 8",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "nvidia/cuda:12.2.2-cudnn8-devel-ubuntu22.04", // https://hub.docker.com/r/nvidia/cuda/tags
+	"name": "Ubuntu 22.04 - CUDA 12.2 - cuDNN 8",
+	"image": "nvidia/cuda:12.2.2-cudnn8-devel-ubuntu22.04",
+	"runArgs": [
+		"--gpus",
+		"all"
+	],
 	"features": {
 		"ghcr.io/devcontainers/features/python:1": {
 			"installTools": true,
