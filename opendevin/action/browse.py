@@ -1,6 +1,8 @@
+import os
 import base64
 from dataclasses import dataclass
 from opendevin.observation import BrowserOutputObservation
+from opendevin.schema import ActionType
 from typing import TYPE_CHECKING
 from playwright.async_api import async_playwright
 
@@ -9,17 +11,21 @@ from .base import ExecutableAction
 if TYPE_CHECKING:
     from opendevin.controller import AgentController
 
+
 @dataclass
 class BrowseURLAction(ExecutableAction):
     url: str
-    action: str = "browse"
+    action: str = ActionType.BROWSE
 
-    async def run(self, controller: "AgentController") -> BrowserOutputObservation: # type: ignore
+    async def run(self, controller: "AgentController") -> BrowserOutputObservation:  # type: ignore
+        asked_url = self.url
+        if not asked_url.startswith("http"):
+            asked_url = os.path.abspath(os.curdir) + self.url
         try:
             async with async_playwright() as p:
                 browser = await p.chromium.launch()
                 page = await browser.new_page()
-                response = await page.goto(self.url)
+                response = await page.goto(asked_url)
                 # content = await page.content()
                 inner_text = await page.evaluate("() => document.body.innerText")
                 screenshot_bytes = await page.screenshot(full_page=True)
@@ -29,7 +35,7 @@ class BrowseURLAction(ExecutableAction):
                 return BrowserOutputObservation(
                     content=inner_text,  # HTML content of the page
                     screenshot=screenshot_base64,  # Base64-encoded screenshot
-                    url=self.url,
+                    url=asked_url,
                     status_code=response.status if response else 0,  # HTTP status code
                 )
         except Exception as e:
@@ -37,9 +43,10 @@ class BrowseURLAction(ExecutableAction):
                 content=str(e),
                 screenshot="", 
                 error=True,
-                url=self.url
+                url=asked_url
             )
-        
+
+
     @property
     def message(self) -> str:
         return f"Browsing URL: {self.url}"
